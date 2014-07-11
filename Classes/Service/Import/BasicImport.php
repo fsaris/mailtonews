@@ -97,7 +97,7 @@ class BasicImport implements ImportInterface {
 		$data['author_email'] = $mail->fromAddress;
 
 		if (!empty($mail->textHtml)) {
-			$data['bodytext'] = $mail->textHtml;
+			$data['bodytext'] = $this->cleanBodyText($mail->textHtml, $data['pid']);
 		} else {
 			$data['bodytext'] = $mail->textPlain;
 		}
@@ -122,6 +122,34 @@ class BasicImport implements ImportInterface {
 			$this->handleImagesAsMedia($images, $data);
 		}
 		return $data;
+	}
+
+	/**
+	 * Clean body text
+	 *
+	 * @param string $text
+	 * @param int $pid
+	 * @return string
+	 */
+	protected function cleanBodyText($text, $pid) {
+
+		// Fetch content between body tags
+		if (strpos($text, '<body')) {
+			if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $text, $matches)) {
+				$text = $matches[1];
+			}
+		}
+
+		/** @var $htmlParser \TYPO3\CMS\Core\Html\RteHtmlParser */
+		$parseHTML = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Html\\RteHtmlParser');
+		$parseHTML->init('tx_news_domain_model_news:bodytext', $pid);
+		//$parseHTML->setRelPath('http://ltogknl.beech-h02.com/');
+		$tsConfig = \TYPO3\CMS\Backend\Utility\BackendUtility::getPagesTSconfig($pid);
+
+		// Perform transformation:
+		$text = $parseHTML->RTE_transform($text, array('rte_transform' => array('parameters' => array('flag=rte_disabled','mode=ts_css'))), 'db', $tsConfig['RTE.']['default.']);
+
+		return $text;
 	}
 
 	/**
