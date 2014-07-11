@@ -235,7 +235,8 @@ class BasicImport implements ImportInterface {
 			/** @var \IncomingMailAttachment $mediaElement */
 			$toBeImported[] = array(
 				'type' => 0,
-				'image' => str_replace(PATH_site, '', $mediaElement->filePath)
+				'image' => str_replace(PATH_site, '', $mediaElement->filePath),
+				'showinpreview' => 1,
 			);
 		}
 		$data['media'] = $toBeImported;
@@ -274,7 +275,6 @@ class BasicImport implements ImportInterface {
 
 		return $cols;
 	}
-
 
 	/**
 	 * Returns TRUE if either no allowed email addresses are set
