@@ -44,13 +44,23 @@ class SmtpService {
 	protected $host = '';
 	protected $configuration = array();
 
-	/** @var  \ImapMailbox */
+	/**
+	 * @var \ImapMailbox
+	 */
 	protected $mailbox;
 	protected $tempDirectory;
 
 	protected $out = array();
-	/** @var  \TYPO3\CMS\Extbase\Object\ObjectManagerInterface */
+
+	/**
+	 * @var  \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
+	 */
 	protected $objectManager;
+
+	/**
+	 * @var \TYPO3\CMS\Extbase\Service\CacheService
+	 */
+	protected $cacheService;
 
 	/**
 	 * @return void
@@ -74,6 +84,7 @@ class SmtpService {
 		if (!$importer instanceof ImportInterface) {
 			throw new \Exception(sprintf('The class "%s" must implement ImportInterface', $importerClass));
 		}
+		$successCount = 0;
 		foreach ($mailsIds as $mailId) {
 			$mail = $this->mailbox->getMail($mailId, $this);
 
@@ -86,6 +97,7 @@ class SmtpService {
 			}
 
 			$importer->save($mail, $this);
+			$successCount++;
 			if (!empty($this->configuration['notifications']['onSuccess'])) {
 				$this->sendNotification($mail, 'Mail received');
 			}
@@ -93,6 +105,11 @@ class SmtpService {
 			if (!empty($this->configuration['deleteMailAfterImport'])) {
 				$this->mailbox->deleteMail($mailId);
 			}
+		}
+
+		// Clear all cache
+		if ($successCount > 0) {
+			$this->cacheService->clearPageCache();
 		}
 	}
 
@@ -177,6 +194,24 @@ class SmtpService {
 	 */
 	public function getObjectManager() {
 		return $this->objectManager;
+	}
+
+	/**
+	 * Set cacheService
+	 *
+	 * @param mixed $cacheService
+	 */
+	public function setCacheService($cacheService) {
+		$this->cacheService = $cacheService;
+	}
+
+	/**
+	 * Get cacheService
+	 *
+	 * @return mixed
+	 */
+	public function getCacheService() {
+		return $this->cacheService;
 	}
 
 	/**

@@ -45,6 +45,12 @@ class ImportCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\CommandC
 	protected $configurationManager;
 
 	/**
+	 * @var \TYPO3\CMS\Extbase\Service\CacheService
+	 * @inject
+	 */
+	protected $cacheService;
+
+	/**
 	 * TS settings
 	 *
 	 * @var array
@@ -74,6 +80,7 @@ class ImportCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\CommandC
 		$smtpService->setPassword($config['password']);
 		$smtpService->setHost($config['host']);
 		$smtpService->setObjectManager($this->objectManager);
+		$smtpService->setCacheService($this->cacheService);
 
 		$smtpService->import();
 
