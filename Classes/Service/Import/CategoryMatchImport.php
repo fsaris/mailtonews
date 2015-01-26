@@ -65,7 +65,7 @@ class CategoryMatchImport extends BasicImport {
 		$data['author_email'] = $mail->fromAddress;
 
 		if (!empty($mail->textHtml)) {
-			$data['bodytext'] = $this->cleanUpMessage($mail->textHtml);
+			$data['bodytext'] = $this->cleanBodyText($mail->textHtml, $data['pid']);
 		} else {
 			$data['bodytext'] = $this->cleanUpMessage($mail->textPlain, TRUE);
 		}
