@@ -1,0 +1,19 @@
+{
+	"name": "georgringer/mailtonews",
+	"type": "typo3-cms-extension",
+	"description": "Determine the dominant image color to use as background for lazy loading images etc",
+	"license": ["GPL-2.0+"],
+	"require": {
+		"php": ">=5.5.0",
+		"typo3/cms-core": ">=7.6.0,<8.9.99"
+	},
+	"replace": {
+		"mailtonews": "self.version",
+		"typo3-ter/mailtonews": "self.version"
+	},
+	"autoload": {
+		"psr-4": {
+			"GeorgRinger\\Mailtonews\\": "Classes/"
+		}
+	}
+}
