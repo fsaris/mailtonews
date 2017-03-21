@@ -128,7 +128,9 @@ class SmtpService {
 		}
 		$this->tempDirectory = $tempDir;
 
-		GeneralUtility::requireOnce(ExtensionManagementUtility::extPath('mailtonews') . 'Resources/Private/Php/php-imap/src/ImapMailbox.php');
+		if (!class_exists(\ImapMailbox::class)) {
+			GeneralUtility::requireOnce(ExtensionManagementUtility::extPath('mailtonews') . 'Resources/Private/Php/php-imap/src/ImapMailbox.php');
+		}
 		$this->mailbox = new \ImapMailbox($this->host, $this->username, $this->password, $this->tempDirectory);
 
 	}

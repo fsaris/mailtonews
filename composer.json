@@ -5,7 +5,8 @@
 	"license": ["GPL-2.0+"],
 	"require": {
 		"php": ">=5.5.0",
-		"typo3/cms-core": ">=7.6.0,<8.9.99"
+		"typo3/cms-core": ">=7.6.0,<8.9.99",
+		"php-imap/php-imap": "^1.0"
 	},
 	"replace": {
 		"mailtonews": "self.version",
