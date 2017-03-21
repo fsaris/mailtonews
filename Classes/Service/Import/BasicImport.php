@@ -65,8 +65,8 @@ class BasicImport implements ImportInterface {
 		$this->smtpService = $smtpService;
 		$data = array($this->extractDataFromMail($mail));
 
-		/** @var \Tx_News_Domain_Service_NewsImportService $newsImportService */
-		$newsImportService = $smtpService->getObjectManager()->get('Tx_News_Domain_Service_NewsImportService');
+		/** @var \GeorgRinger\News\Domain\Service\NewsImportService $newsImportService */
+		$newsImportService = $smtpService->getObjectManager()->get(\GeorgRinger\News\Domain\Service\NewsImportService::class);
 		$newsImportService->import($data);
 
 		$smtpService->getMailbox()->markMailAsUnread($mail->id);
